@@ -9,6 +9,7 @@ public class MainGame : MonoBehaviour {
 	public NPC NPC1;
 	public NPC NPC2;
 
+
 	protected Vector3 cameraOffset;
 
 	 //Use this for initialization
@@ -19,23 +20,23 @@ public class MainGame : MonoBehaviour {
 		if (MainCamera == null) {
 			Debug.LogError("Main Camera is not set.  Attach a Camera in the Main.scene!");
 		}
-		cameraOffset = MainCamera.transform.position - Player.transform.position;
+		cameraOffset = Player.transform.position;
 	}
 
 	 //Update is called once per frame; good for input
 	protected void Update() {
-		//ResolveInput();
+		ResolveInput();
 		//ResolveNPCs();
 	}
 	 
 	 //LateUpdate is called once per frame after Update(); good for cameras following characters
 	protected void LateUpdate() {
-		//RepositionCamera();
+		RepositionCamera();
 	}
 
 	//Helper methods
 	protected void ResolveInput() {
-		OnKeyDown();
+		//OnKeyDown();
 		HandleInputAxes();
 	}
 
@@ -44,6 +45,7 @@ public class MainGame : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			Player.Jump();
 		}
+		
 	}
 
 	protected void HandleInputAxes() {
@@ -67,8 +69,7 @@ public class MainGame : MonoBehaviour {
 	}
 
 	protected void RepositionCamera() {
-		MainCamera.transform.position = new Vector3(Player.transform.position.x + cameraOffset.x, 
-			cameraOffset.y, 
-			Player.transform.position.z + cameraOffset.z);
+		MainCamera.transform.position = Player.transform.position;
+		MainCamera.transform.rotation = Player.transform.rotation;
 	}
 }
