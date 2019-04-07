@@ -15,9 +15,9 @@ public class MainGame : MonoBehaviour {
 	public Text BLabel;
 	public Text CLabel;
 	public Text DLabel;
-	public Text scoreLabel;
+	// public Text scoreLabel;
 	public Text pizzaCarLabel;
-	public Text strikeLabel;
+	// public Text strikeLabel;
 	public Image star;
 
 
@@ -41,14 +41,19 @@ public class MainGame : MonoBehaviour {
 
 	 //Update is called once per frame; good for input
 	protected void Update() {
-		Player.transform.rotation = MainCamera.transform.rotation;
-		float newZ = (Player.transform.position.z * 9/19) + 80;
+		//Player.transform.rotation = MainCamera.transform.rotation;
+		float newZ = ((Player.transform.position.z + 50) * 1/5) + 85;
 			star.rectTransform.localPosition = new Vector3(
-				(Player.transform.position.x * 11/16) - 125,
-				newZ,
-				2
+				(Player.transform.position.x * 6/16) - 2,
+				newZ - 4,
+				(float)134.2
 			);
-			
+			pizzaCarLabel.rectTransform.localPosition = new Vector3(
+				(Player.transform.position.x * 6/16),
+				newZ,
+				(float)134.2
+			);
+		Debug.Log(pizzaCarLabel.rectTransform.localPosition);
 		ResolveInput();
 		NumberMap();
 		pizzaHandler.Update(Time.frameCount);
@@ -106,8 +111,8 @@ public class MainGame : MonoBehaviour {
 		BLabel.text = pizzaHandler.GetList().numOrdersFor('B').ToString();
 		CLabel.text = pizzaHandler.GetList().numOrdersFor('C').ToString();
 		DLabel.text = pizzaHandler.GetList().numOrdersFor('D').ToString();
-		scoreLabel.text = "Score: " + score.ToString();
-		pizzaCarLabel.text = "Pizzas in Car: " + pizzaHandler.GetList().GetCount().ToString();
-		strikeLabel.text = "Strikes: " + "0" + "/3";
+		//scoreLabel.text = "Score: " + score.ToString();
+		pizzaCarLabel.text = pizzaHandler.GetList().GetCount().ToString();
+		//strikeLabel.text = "Strikes: " + "0" + "/3";
 	}
 }
