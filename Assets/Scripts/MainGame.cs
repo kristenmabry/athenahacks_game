@@ -41,6 +41,14 @@ public class MainGame : MonoBehaviour {
 
 	 //Update is called once per frame; good for input
 	protected void Update() {
+		Player.transform.rotation = MainCamera.transform.rotation;
+		float newZ = (Player.transform.position.z * 9/19) + 80;
+			star.rectTransform.localPosition = new Vector3(
+				(Player.transform.position.x * 11/16) - 125,
+				newZ,
+				2
+			);
+			
 		ResolveInput();
 		NumberMap();
 		pizzaHandler.Update(Time.frameCount);
@@ -74,12 +82,7 @@ public class MainGame : MonoBehaviour {
 		//If we're moving, let's tell the player to move
 		if (x != 0f || z != 0f) {
 			Player.Move(x*3, z*3);
-			float newZ = (Player.transform.position.z * 9/19) + 80;
-			star.rectTransform.localPosition = new Vector3(
-				(Player.transform.position.x * 11/16) - 125,
-				newZ,
-				2
-			);
+			
 		}
 	}
 
@@ -94,7 +97,7 @@ public class MainGame : MonoBehaviour {
 
 	protected void RepositionCamera() {
 		MainCamera.transform.position = Player.transform.position;
-		MainCamera.transform.rotation = Player.transform.rotation;
+		//MainCamera.transform.rotation = Player.transform.rotation;
 	}
 
 	protected void NumberMap() {
