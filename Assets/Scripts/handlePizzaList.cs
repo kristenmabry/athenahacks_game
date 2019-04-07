@@ -39,20 +39,20 @@ public class HandlePizzaList {
     }
 
     public int CheckHouse(Vector3 coords) {
-        if (coords.z < -70 && coords.x < -70) {
+        if (coords.z < -65 && coords.x < -65) {
             list.PickUp();
             return 0;
         }
-        else if (coords.z > 70 && coords.x < -70) {
+        else if (coords.z > 65 && coords.x < -65) {
             return list.Remove('A');
         }
-        else if (coords.z > 70 && coords.x > 70) {
+        else if (coords.z > 65 && coords.x > 65) {
             return list.Remove('B');
         }
-        else if (coords.z < -70 && coords.x > 70) {
+        else if (coords.z < -65 && coords.x > 65) {
             return list.Remove('D');
         }
-        else if (coords.z > -18 && coords.z < 8 && coords.x > 0 && coords.x < 16) {
+        else if (coords.z > -20 && coords.z < 10 && coords.x > -2 && coords.x < 18) {
             return list.Remove('C');
         }
         else {

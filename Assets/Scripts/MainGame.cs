@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
 using HandlePizzas;
 
 public class MainGame : MonoBehaviour {
-
+    public float yaw;
+    public float rad;
 	public Camera MainCamera;
 	public Player Player;
-	public NPC NPC1;
-	public NPC NPC2;
 	public Text pizzaLabel;
 	public Text ALabel;
 	public Text BLabel;
 	public Text CLabel;
 	public Text DLabel;
-	// public Text scoreLabel;
+	public Text scoreLabel;
 	public Text pizzaCarLabel;
-	// public Text strikeLabel;
+	public Text strikeLabel;
 	public Image star;
 
 
@@ -36,12 +36,7 @@ public class MainGame : MonoBehaviour {
 		cameraOffset = Player.transform.position;
 		pizzaHandler = new HandlePizzaList();
 		score = 0;
-		
-	}
 
-	 //Update is called once per frame; good for input
-	protected void Update() {
-		//Player.transform.rotation = MainCamera.transform.rotation;
 		float newZ = ((Player.transform.position.z + 50) * 1/5) + 85;
 			star.rectTransform.localPosition = new Vector3(
 				(Player.transform.position.x * 6/16) - 2,
@@ -53,7 +48,16 @@ public class MainGame : MonoBehaviour {
 				newZ,
 				(float)134.2
 			);
-		Debug.Log(pizzaCarLabel.rectTransform.localPosition);
+		
+	}
+
+    //protected void FixedUpdate()
+    //{
+    //    HandleInputAxes();
+    //}
+
+    //Update is called once per frame; good for input
+    protected void Update() {
 		ResolveInput();
 		NumberMap();
 		pizzaHandler.Update(Time.frameCount);
@@ -81,28 +85,33 @@ public class MainGame : MonoBehaviour {
 
 	protected void HandleInputAxes() {
 		//Input.GetAxisRaw returns a value -1, 0, or 1
-		float x = Input.GetAxisRaw("Horizontal") * Time.deltaTime; //multiply by Time.deltaTime to normalize movement
-		float z = Input.GetAxisRaw("Vertical") * Time.deltaTime;
+		//float x = Input.GetAxisRaw("Horizontal") * Time.deltaTime; //multiply by Time.deltaTime to normalize movement
+		//float z = Input.GetAxisRaw("Vertical") * Time.deltaTime;
 
-		//If we're moving, let's tell the player to move
-		if (x != 0f || z != 0f) {
+        //If we're moving, let's tell the player to move
+        if(Input.GetKey(KeyCode.UpArrow)) {
+            yaw = InputTracking.GetLocalRotation(XRNode.Head).eulerAngles.y;
+            rad = yaw * Mathf.Deg2Rad;
+            float z = Mathf.Cos(rad) *Time.deltaTime;
+            float x = Mathf.Sin(rad) * Time.deltaTime;
 			Player.Move(x*3, z*3);
-			
-		}
-	}
-
-	protected void ResolveNPCs() {
-		if (NPC1 != null) {
-			NPC1.LookAt (Player.transform);
-		}
-		if (NPC2 != null) {
-			NPC2.LookAt (Player.transform);
+			float newZ = ((Player.transform.position.z + 50) * 1/5) + 85;
+			star.rectTransform.localPosition = new Vector3(
+				(Player.transform.position.x * 6/16) - 2,
+				newZ - 4,
+				(float)134.2
+			);
+			pizzaCarLabel.rectTransform.localPosition = new Vector3(
+				(Player.transform.position.x * 6/16),
+				newZ,
+				(float)134.2
+			);
 		}
 	}
 
 	protected void RepositionCamera() {
 		MainCamera.transform.position = Player.transform.position;
-		//MainCamera.transform.rotation = Player.transform.rotation;
+		MainCamera.transform.rotation = Player.transform.rotation;
 	}
 
 	protected void NumberMap() {
