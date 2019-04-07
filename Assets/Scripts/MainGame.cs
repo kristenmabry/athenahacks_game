@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using HandlePizzas;
 
 public class MainGame : MonoBehaviour {
 
@@ -8,9 +10,20 @@ public class MainGame : MonoBehaviour {
 	public Player Player;
 	public NPC NPC1;
 	public NPC NPC2;
+	public Text pizzaLabel;
+	public Text ALabel;
+	public Text BLabel;
+	public Text CLabel;
+	public Text DLabel;
+	public Text scoreLabel;
+	public Text pizzaCarLabel;
+	public Text strikeLabel;
+	public Image star;
 
 
 	protected Vector3 cameraOffset;
+	protected HandlePizzaList pizzaHandler;
+	protected int score;
 
 	 //Use this for initialization
 	 protected void Start () {
@@ -21,12 +34,17 @@ public class MainGame : MonoBehaviour {
 			Debug.LogError("Main Camera is not set.  Attach a Camera in the Main.scene!");
 		}
 		cameraOffset = Player.transform.position;
+		pizzaHandler = new HandlePizzaList();
+		score = 0;
+		
 	}
 
 	 //Update is called once per frame; good for input
 	protected void Update() {
 		ResolveInput();
-		//ResolveNPCs();
+		NumberMap();
+		pizzaHandler.Update(Time.frameCount);
+
 	}
 	 
 	 //LateUpdate is called once per frame after Update(); good for cameras following characters
@@ -36,14 +54,14 @@ public class MainGame : MonoBehaviour {
 
 	//Helper methods
 	protected void ResolveInput() {
-		//OnKeyDown();
+		OnKeyDown();
 		HandleInputAxes();
 	}
 
 	protected void OnKeyDown() {
 		//Input.GetKeyDown returns true on the frame the Key was pressed down
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			Player.Jump();
+			score += pizzaHandler.CheckHouse(Player.transform.position);
 		}
 		
 	}
@@ -55,7 +73,13 @@ public class MainGame : MonoBehaviour {
 
 		//If we're moving, let's tell the player to move
 		if (x != 0f || z != 0f) {
-			Player.Move(x, z);
+			Player.Move(x*3, z*3);
+			float newZ = (Player.transform.position.z * 9/19) + 80;
+			star.rectTransform.localPosition = new Vector3(
+				(Player.transform.position.x * 11/16) - 125,
+				newZ,
+				2
+			);
 		}
 	}
 
@@ -71,5 +95,16 @@ public class MainGame : MonoBehaviour {
 	protected void RepositionCamera() {
 		MainCamera.transform.position = Player.transform.position;
 		MainCamera.transform.rotation = Player.transform.rotation;
+	}
+
+	protected void NumberMap() {
+		pizzaLabel.text = pizzaHandler.GetList().GetHutCount().ToString();
+		ALabel.text = pizzaHandler.GetList().numOrdersFor('A').ToString();
+		BLabel.text = pizzaHandler.GetList().numOrdersFor('B').ToString();
+		CLabel.text = pizzaHandler.GetList().numOrdersFor('C').ToString();
+		DLabel.text = pizzaHandler.GetList().numOrdersFor('D').ToString();
+		scoreLabel.text = "Score: " + score.ToString();
+		pizzaCarLabel.text = "Pizzas in Car: " + pizzaHandler.GetList().GetCount().ToString();
+		strikeLabel.text = "Strikes: " + "0" + "/3";
 	}
 }
