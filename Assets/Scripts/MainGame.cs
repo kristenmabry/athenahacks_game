@@ -18,6 +18,7 @@ public class MainGame : MonoBehaviour {
 	public Text scoreLabel;
 	public Text pizzaCarLabel;
 	public Text strikeLabel;
+    public Text timerLabel;
 	public Image star;
 
 
@@ -94,7 +95,7 @@ public class MainGame : MonoBehaviour {
             rad = yaw * Mathf.Deg2Rad;
             float z = Mathf.Cos(rad) *Time.deltaTime;
             float x = Mathf.Sin(rad) * Time.deltaTime;
-			Player.Move(x*3, z*3);
+			Player.Move(x*10, z*10);
 			float newZ = ((Player.transform.position.z + 50) * 1/5) + 85;
 			star.rectTransform.localPosition = new Vector3(
 				(Player.transform.position.x * 6/16) - 2,
@@ -120,8 +121,9 @@ public class MainGame : MonoBehaviour {
 		BLabel.text = pizzaHandler.GetList().numOrdersFor('B').ToString();
 		CLabel.text = pizzaHandler.GetList().numOrdersFor('C').ToString();
 		DLabel.text = pizzaHandler.GetList().numOrdersFor('D').ToString();
-		//scoreLabel.text = "Score: " + score.ToString();
+		scoreLabel.text = "Score: " + score.ToString();
 		pizzaCarLabel.text = pizzaHandler.GetList().GetCount().ToString();
+        timerLabel.text = "Timer: " + (Time.time).ToString("F2");
 		//strikeLabel.text = "Strikes: " + "0" + "/3";
 	}
 }

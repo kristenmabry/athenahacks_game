@@ -33,7 +33,7 @@ public class HandlePizzaList {
 	}
 
     public void Update(int frame) {
-		if (frame % 500 == 0) {
+		if (frame % 1500 == 0) {
 			list.Add(GetRandDest());
 		}
     }
